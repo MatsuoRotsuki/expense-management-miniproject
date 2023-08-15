@@ -8,6 +8,10 @@ abstract class Model implements JsonSerializable {
 
     protected $table;
 
+    protected $primaryKey;
+
+    protected $attributes = [];
+
     public function getTable() {
         return $this->table;
     }
@@ -29,10 +33,6 @@ class User extends Model {
         'email',
         'password',
     ];
-}
-
-class Expense extends Model {
-    
 }
 
 echo json_encode(User::create([

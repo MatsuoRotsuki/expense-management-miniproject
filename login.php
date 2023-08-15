@@ -32,7 +32,7 @@
           </div>
           
           <!-- Right -->
-          <div>Please log in</div>
+          <div>Please login</div>
         </div>
       </nav>
     </div>
@@ -51,32 +51,10 @@
       <div class="mx-auto bg-white rounded-xl w-[500px] border-2 border-[#f8f8f8] shadow-lg py-8 px-12">
         <div class="flex flex-col">
           <!-- Form -->
-          <div class="text-3xl font-semibold text-center">Sign up</div>
+          <div class="text-3xl font-semibold text-center">Log in</div>
 
           <div class ="pt-8">
-            <form action="./includes/signup.inc.php" method="post">
-              <!-- First Name -->
-              <div class="flex flex-col py-3">
-                <span class="text-sm">First name</span>
-                <input 
-                  type="text" 
-                  name="firstname" 
-                  placeholder="Type your first name"
-                  class="h-[55px] w-full px-6 border-b-2 border-[#cdcdcd]"
-                >
-              </div>
-
-              <!-- Last Name -->
-              <div class="flex flex-col py-3">
-                <span class="text-sm">Last name</span>
-                <input 
-                  type="text" 
-                  name="lastname" 
-                  placeholder="Type your last name"
-                  class="h-[55px] w-full px-6 border-b-2 border-[#cdcdcd]"
-                >
-              </div>
-
+            <form action="./functions.php" method="post">
               <!-- Email -->
               <div class="flex flex-col py-3">
                 <span class="text-sm">Email</span>
@@ -99,21 +77,10 @@
                 >
               </div>
 
-              <!-- Confirm password -->
-              <div class="flex flex-col py-3">
-                <span class="text-sm">Confirm password</span>
-                <input 
-                  type="password" 
-                  name="confirmpassword" 
-                  placeholder="Confirm password"
-                  class="h-[55px] w-full px-6 border-b-2 border-[#cdcdcd]"
-                >
-              </div>
-
-              <!-- Login -->
+              <!-- Forgot Password? -->
               <div class="flex-none pb-8">
                 <div class="mx-auto text-right text-sm">
-                  <a href="./login.php" >Already have account ?</a>
+                  <a href="./signup.php" >Forgot your password ?</a>
                 </div>
               </div>
 
@@ -121,7 +88,7 @@
               <div class="flex-none px-10">
                 <button type="submit" class="w-full">
                   <div class="bg-blue-500 text-xl text-white text-center mx-auto py-4 rounded-[25px] shadow-lg hover:bg-blue-700">
-                    SIGN UP
+                    LOGIN
                   </div>
                 </button>
               </div>
