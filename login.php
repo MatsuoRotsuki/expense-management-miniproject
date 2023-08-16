@@ -7,13 +7,14 @@
     <meta name="description" content="">
     <meta name="author"content="">
 
-    <title>Genuine PHP Project</title>
+    <title>Moneykeeper</title>
 
     <!-- Custom Font -->
     <!-- font-family: 'Lato', sans-serif; -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

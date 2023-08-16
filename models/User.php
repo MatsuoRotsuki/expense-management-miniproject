@@ -1,15 +1,25 @@
 <?php
 
-// namespace Eloquent;
+require_once "./Model.php";
 
-// use Model;
+class User extends Model {
+    protected $table = 'users';
 
-// class User extends Model {
-//     protected $table = 'users';
+    protected $primaryKey = 'id';
 
-//     public function getAllUsers() {
-//         return $this->findAll();
-//     }
-// }
+    protected $attributes = [
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+    ];
+}
+
+echo json_encode(User::create([
+    'first_name' => 'Loc',
+    'last_name' => 'Pham Tien',
+    'email' => 'loclienhadonganh@gmail.com',
+    'password' => '123456',
+]));
 
 ?>

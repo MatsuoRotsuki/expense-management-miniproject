@@ -1,18 +1,18 @@
 <?php
 
 class Category {
-    public static final $ULTILITIES = 1;
-    public static final $MEAL = 2;
-    public static final $RENT = 3;
-    public static final $EDUCATION = 4;
-    public static final $TRAVEL = 5;
-    public static final $MEDICAL = 6;
-    public static final $CHARITY = 7;
-    public static final $TAX = 8;
-    public static final $MOVING = 9;
-    public static final $SHOPPING = 10;
-    public static final $INSURANCE = 11;
-    public static final $OTHER = 12;
+    public const UTILITIES = 1;
+    public const MEAL = 2;
+    public const RENT = 3;
+    public const EDUCATION = 4;
+    public const TRAVEL = 5;
+    public const MEDICAL = 6;
+    public const CHARITY = 7;
+    public const TAX = 8;
+    public const COMMUTING = 9;
+    public const SHOPPING = 10;
+    public const INSURANCE = 11;
+    public const OTHER = 12;
 }
 
 ?>

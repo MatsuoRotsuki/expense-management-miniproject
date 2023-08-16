@@ -72,7 +72,7 @@ trait Query {
 
         $statement = "INSERT INTO $table () VALUES ()";
         // $result = Database::getConnection()->query($statement);
-        return null;
+        return $model->attributes;
     }
 
     public static function update($id, array $data) : bool
