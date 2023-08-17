@@ -18,4 +18,6 @@ class Expense extends Model {
     ];
 }
 
+echo var_dump(Expense::update(1,['description' => 'thu dien dien', 'amount' => '100000', 'category' => 1, 'location' => 'Dai hoc bach khoa Ha Noi', 'user_id' => 1]));
+
 ?>
