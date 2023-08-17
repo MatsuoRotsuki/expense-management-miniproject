@@ -1,18 +1,21 @@
 <?php
 
 class Category {
-    public const UTILITIES = 1;
-    public const MEAL = 2;
-    public const RENT = 3;
-    public const EDUCATION = 4;
-    public const TRAVEL = 5;
-    public const MEDICAL = 6;
-    public const CHARITY = 7;
-    public const TAX = 8;
-    public const COMMUTING = 9;
-    public const SHOPPING = 10;
-    public const INSURANCE = 11;
-    public const OTHER = 12;
+
+    public const CATEGORY = [
+        'Utilities' => 1,
+        'Meal' => 2,
+        'Rent' => 3,
+        'Education' => 4,
+        'Travel' => 5,
+        'Medical' => 6,
+        'Charity' => 7,
+        'Tax' => 8,
+        'Commuting' => 9,
+        'Shopping' => 10,
+        'Insurance' => 11,
+        'Other' => 12,
+    ];
 }
 
 ?>

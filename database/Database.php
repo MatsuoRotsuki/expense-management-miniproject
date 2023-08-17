@@ -30,5 +30,13 @@ class Database {
 
         return self::$connection;
     }
+
+    public static function query(string $query) {
+        if (self::$instance === null) {
+            self::$instance = new Database();
+        }
+
+        return self::$connection->query($query);
+    }
 }
 ?>
