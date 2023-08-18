@@ -34,7 +34,7 @@ class Route
         self::$routes[$lastRouteIndex]['middleware'] = $middlewareClass;
     }
 
-    public static function run()
+    public static function handle()
     {
         $uri = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
