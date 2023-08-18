@@ -5,7 +5,7 @@ class Router
 {
     private static $instance;
 
-    public function __construct()
+    private function __construct()
     {
         Route::get('/', ['AuthController', 'login']);
         Route::get('/login', ['AuthController', 'login']);

@@ -12,15 +12,19 @@ trait Query
     {
         $model = new static;
         $table = $model->table;
-        $statement = "SELECT * from $table";
-        $result = Database::getConnection()->query($statement);
-        $rows = [];
 
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $rows[] = $row;
-            }
+        $statement = "SELECT * from $table";
+        $stmt = Database::prepare($statement);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $rows = [];
+        while($row = $result->fetch_assoc()) {
+            $rows[] = $row;
         }
+
+        $stmt->close();
         return $rows;
     }
 
@@ -34,16 +38,24 @@ trait Query
             $table = $model->table;
             $primaryKey = $model->primaryKey;
 
-            $statement = "SELECT * from $table where $primaryKey = $identifier";
-            $result = Database::query($statement);
+            $statement = "SELECT * from $table where id = ?";
+            $stmt = Database::prepare($statement);
+            $stmt->bind_param('i', $identifier);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
     
-            if ($result->num_rows > 0) {
+            if ($result->num_rows === 0) {
+                $stmt->close();
+                return null;
+            } else {
                 $row = $result->fetch_assoc();
                 foreach ($row as $key => $value) {
                     $model->{$key} = $value;
                 }
+                $stmt->close();
                 return $model;
-            } else return null;
+            }
         } catch (Exception $e)
         {
             echo $e->getMessage();
@@ -64,24 +76,34 @@ trait Query
             $model = new static;
             $table = $model->table;
 
-            $whereparts = [];
+            $types = '';
+            $params = [];
 
-            foreach($assoc_array as $key => $value) {
-                $whereparts[] = $key . " = '" . $value . "' ";
+            $whereConditions = [];
+            foreach ($assoc_array as $key => $value) {
+                $whereConditions[] = $key . " = ?";
+                $types .= 's';
+                $params[] = $value;
             }
 
-            $whereclauses = join(" AND ", $whereparts);
+            $whereClause = implode(" AND ", $whereConditions);
 
-            $statement = "SELECT * FROM $table WHERE $whereclauses";
-            $result = Database::query($statement);
+            $statement = "SELECT * FROM $table WHERE $whereClause";
+            $stmt = Database::prepare($statement);
+
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+            
+            $result = $stmt->get_result();
 
             $rows = [];
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     $rows[] = $row;
                 }
-            } else return null;
+            }
 
+            $stmt->close();
             return $rows;
         } catch (Exception $e)
         {
@@ -89,15 +111,27 @@ trait Query
         }
     }
 
-    public static function whereIn(string $attribute_name, array $assoc_array)
+    public static function whereIn(string $attribute_name, array $array)
     {
         try {
             $model = new static;
             $table = $model->table;
 
-            $values = join(', ', $assoc_array);
-            $statement = "SELECT * FROM $table WHERE $attribute_name IN (" . $values . ')';
-            $result = Database::query($statement);
+            $types = '';
+            $params = [];
+
+            $values = implode(', ', array_fill(0, count($array), '?'));
+            foreach ($array as $value) {
+                $types .= 's';
+                $params[] = $value;
+            }
+            $statement = "SELECT * FROM $table WHERE $attribute_name IN ($values)";
+            $stmt = Database::prepare($statement);
+
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
 
             $rows = [];
             if ($result->num_rows > 0) {
@@ -105,7 +139,8 @@ trait Query
                     $rows[] = $row;
                 }
             }
-            return $rows; 
+            $stmt->close();
+            return $rows;
         } catch (Exception $e)
         {
             echo $e->getMessage();
@@ -118,8 +153,13 @@ trait Query
             $model = new static;
             $table = $model->table;
 
-            $statement = "SELECT * FROM $table WHERE $attribute_name BETWEEN $lower_bound AND $upper_bound";
-            $result = Database::query($statement);
+            $statement = "SELECT * FROM $table WHERE $attribute_name BETWEEN ? AND ?";
+            $stmt = Database::prepare($statement);
+
+            $stmt->bind_param('ss', $lower_bound, $upper_bound);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
 
             $rows = [];
             if ($result->num_rows > 0) {
@@ -127,6 +167,7 @@ trait Query
                     $rows[] = $row;
                 }
             }
+            $stmt->close();
             return $rows;
 
         } catch (Exception $e) {
@@ -174,22 +215,35 @@ trait Query
         return $record;
     }
 
-    public static function update($identifier, array $data)
+    public static function update($identifier, array $assoc_array)
     {
         try {
             $model = new static;
             $table = $model->table;
             $primaryKey = $model->primaryKey;
+            $types = '';
+            $params = [];
             $setParts = [];
 
-            foreach ($data as $key => $value) {
-                $setParts[] = $key . " = " . "'$value'";
+            foreach ($assoc_array as $key => $value) {
+                $setParts[] = $key . ' = ?';
+                $types .= 's';
+                $params[] = $value;
             }
+            
+            //id
+            $types .= 'i';
+            $params[] = $identifier;
 
             $setClauses = join(", ", $setParts);
 
-            $statement = "UPDATE $table SET $setClauses WHERE $primaryKey = $identifier";
-            Database::query($statement);
+            $statement = "UPDATE $table SET $setClauses WHERE $primaryKey = ?";
+            $stmt = Database::prepare($statement);
+
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+
+            $stmt->close();
 
             return self::find($identifier);
         } catch (Exception $e)
@@ -204,9 +258,17 @@ trait Query
             $model = new static;
             $table = $model->table;
             $primaryKey = $model->primaryKey;
-            $statement = "DELETE FROM $table WHERE $primaryKey = $identifier";
-            $result = Database::query($statement);
-            return $result;
+
+            $model = self::find($identifier);
+
+            $statement = "DELETE FROM $table WHERE $primaryKey = ?";
+            $stmt = Database::prepare($statement);
+
+            $stmt->bind_param('i', $identifier);
+            $stmt->execute();
+            
+            $stmt->close();
+            return $model;
         } catch (Exception $e)
         {
             echo $e->getMessage();
