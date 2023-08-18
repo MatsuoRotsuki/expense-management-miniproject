@@ -23,10 +23,3 @@ abstract class Model implements JsonSerializable
         return $this;
     }
 }
-
-// echo json_encode(User::create([
-//     'first_name' => 'Loc',
-//     'last_name' => 'Pham Tien',
-//     'email' => 'loclienhadonganh@gmail.com',
-//     'password' => '123456',
-// ]));
