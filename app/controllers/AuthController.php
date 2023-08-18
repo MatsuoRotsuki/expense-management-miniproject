@@ -8,15 +8,20 @@ class AuthController extends Controller
 {
     public function login()
     {
+        session_start();
         if (isset($_POST['loginSubmit'])) {
             // Validation
-            if (!Validation::validate([
-                $_POST['email'] => '/^[\w.-]+@[\w.-]+\.\w+$/', // format email
-                $_POST['password'] => '/^.{7,}$/',             // string length > 7
-            ])) {
-                $this->view('login', ['errorMessage' => 'Invalid field exists!']);
+            $errors = Validation::validate($_POST, [
+                'email' => 'required|email|max:255',
+                'password' => 'required|max:255|min:7',
+            ]);
+
+            if (count($errors) > 0) {
+                $this->view('login', ['errorMessage' => $errors[0]]);
                 return;
             }
+
+            // hash password ...
 
             // Find user exist
             $user = User::where(['email' => $_POST['email'], 'password' => $_POST['password']]);
@@ -26,8 +31,10 @@ class AuthController extends Controller
             }
 
             // set cookie
-            $rememberToken = Cipher::generateRememberToken($user[0]['id']);
-            setcookie("remember_token", $rememberToken, time() + (86400 * 30), "/"); // Thời hạn: 30 ngày
+            if (isset($_POST['rememberMe'])) {
+                $rememberToken = Cipher::generateRememberToken($user[0]['id']);
+                setcookie("remember_token", $rememberToken, time() + (86400 * 30), "/"); // Thời hạn: 30 ngày
+            }
 
             $_SESSION['email'] = $user[0]['email'];
             $_SESSION['user_id'] = $user[0]['id'];
@@ -57,29 +64,25 @@ class AuthController extends Controller
     public function signup()
     {
         session_start();
-        if (isset($_SESSION['user_id'])) {
-            header("Location: dashboard");
-            return;
-        }
-
         if (isset($_POST['signupSubmit'])) {
             // Validation
+            $errors = Validation::validate($_POST, [
+                'email' => 'required|email|max:255',
+                'password' => 'required|max:255|min:7',
+                'confirmpassword' => 'required|max:255|min:7',
+                'firstname' => 'required|max:255|min:1',
+                'lastname' => 'required|max:255|min:1',
+            ]);
+
+            if (count($errors) > 0) {
+                $this->view('signup', ['errorMessage' => $errors[0]]);
+                return;
+            }
+
             if ($_POST['password'] != $_POST['confirmpassword']) {
                 $this->view('signup', ['errorMessage' => 'Password and confirm password do not match!']);
                 return;
             }
-
-            if (!Validation::validate([
-                $_POST['email'] => '/^[\w.-]+@[\w.-]+\.\w+$/', // format email
-                $_POST['password'] => '/^.{7,}$/',             // string length > 7
-                $_POST['confirmpassword'] => '/^.{7,}$/',             // string length > 7
-                $_POST['firstname'] => '/^.{1,}$/',
-                $_POST['lastname'] => '/^.{1,}$/'
-            ])) {
-                $this->view('signup', ['errorMessage' => 'Invalid field exists!']);
-                return;
-            }
-
 
             $user = User::where(['email' => $_POST['email']]);
 
@@ -99,6 +102,8 @@ class AuthController extends Controller
 
             $_SESSION['email'] = $newUser['email'];
             $_SESSION['user_id'] = $newUser['id'];
+            $_SESSION['first_name'] = $newUser['first_name'];
+            $_SESSION['last_name'] = $newUser['last_name'];
             header("Location: dashboard");
             return;
         }

@@ -68,10 +68,10 @@
             </div>
 
             <!-- Remember me? -->
-            <!-- <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2">
               <label for="remember_me">Remember me:</label>
-              <input type="checkbox" id="remember_me" name="remember_me">
-            </div> -->
+              <input type="checkbox" id="remember_me" name="rememberMe">
+            </div>
 
             <!-- Forgot Password? -->
             <div class="flex-none pb-8">

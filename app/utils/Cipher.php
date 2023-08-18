@@ -1,7 +1,7 @@
 <?php
 class Cipher
 {
-    public static $key = 'abcd1234';
+    private static $key = 'abcd1234';
 
     public static function generateRememberToken($userId)
     {

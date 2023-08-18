@@ -48,10 +48,7 @@ class Route
                 $middlewareClass = $route['middleware'] ?? null;
                 if ($middlewareClass) {
                     $middleware = new $middlewareClass();
-                    if ($middleware->handle() === false) {
-                        $middleware->fail();
-                        return;
-                    }
+                    $middleware->handle();
                 }
 
                 [$controller, $method] = $action;

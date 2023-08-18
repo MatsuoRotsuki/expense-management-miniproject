@@ -41,7 +41,10 @@
                         <?= $data['first_name'] ?>
                         <?= $data['last_name'] ?>
                     </span>
-                    <img src="./public/icons/angle-down.svg" width="20" height="20">
+                    <!-- <img src="./public/icons/angle-down.svg" width="20" height="20"> -->
+                    <a href="/expense-management-miniproject/logout" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-all">
+                        Logout
+                    </a>
                 </div>
             </div>
         </nav>

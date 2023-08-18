@@ -1,13 +1,14 @@
 <?php
 require_once 'app/utils/Cipher.php';
+require_once 'app/middlewares/Middleware.php';
 
-class AuthMiddleware
+class AuthMiddleware implements Middleware
 {
-    public static function handle()
+    public function handle()
     {
         session_start();
         if (isset($_SESSION['user_id'])) {
-            return true;
+            return;
         }
 
         if (isset($_COOKIE['remember_token'])) {
@@ -16,25 +17,28 @@ class AuthMiddleware
             $user_id = Cipher::getUserIdFromRememberToken($rememberToken);
 
             if ($user_id == null) {
-                return false;
+                $this->fail();
+                return;
             }
 
             $user = User::where(['id' => $user_id]);
             if ($user == null) {
-                return false;
+                $this->fail();
+                return;
             }
 
             $_SESSION['email'] = $user[0]['email'];
             $_SESSION['user_id'] = $user[0]['id'];
             $_SESSION['first_name'] = $user[0]['first_name'];
             $_SESSION['last_name'] = $user[0]['last_name'];
-            return true;
+            return;
         }
 
-        return false;
+        $this->fail();
+        return;
     }
 
-    public static function fail()
+    public function fail()
     {
         $redirect_url = "http://localhost/expense-management-miniproject/login";
         header("Location: " . $redirect_url);
