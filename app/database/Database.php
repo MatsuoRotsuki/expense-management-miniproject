@@ -30,4 +30,12 @@ class Database {
 
         return self::$connection;
     }
+
+    public static function query(string $query) {
+        return self::getConnection()->query($query);
+    }
+
+    public static function prepare(string $query) {
+        return self::getConnection()->prepare($query);
+    }
 }
