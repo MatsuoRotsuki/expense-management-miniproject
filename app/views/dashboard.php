@@ -23,32 +23,7 @@
 </head>
 
 <body class="bg-[#E5E5E5] w-full">
-    <!-- Navbar -->
-    <div id="navbar" class="fixed top-0 left-0 right-0">
-        <nav class="w-full h-[64px] bg-white shadow-lg flex items-center">
-            <div class="flex flex-row justify-between w-full px-5">
-                <!-- Logo -->
-                <div>
-                    <a href="../index.php">
-                        <img src="./public/icons/logo.svg" width="40" height="40">
-                    </a>
-                </div>
-
-                <!-- Right -->
-                <div class="flex flex-row justify-end items-center">
-                    <img src="./public/icons/user.svg" width="40" height="40">
-                    <span class="px-4">
-                        <?= $data['first_name'] ?>
-                        <?= $data['last_name'] ?>
-                    </span>
-                    <!-- <img src="./public/icons/angle-down.svg" width="20" height="20"> -->
-                    <a href="/expense-management-miniproject/logout" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-all">
-                        Logout
-                    </a>
-                </div>
-            </div>
-        </nav>
-    </div>
+    <?php include 'app/views/layout/navbar.php' ?>
 
     <!-- Main container -->
     <div class="px-8 py-6 mt-[64px] bg-white">
@@ -96,11 +71,13 @@
             <div>
                 <div class="flex justify-between py-3">
                     <div class="text-lg font-bold">List</div>
-                    <button class="bg-green-600 px-6 py-2 rounded-md flex flex-row items-center">
-                        <div class="pr-2">
-                            <img src="./public/icons/add.svg" width="20" height="20">
-                        </div>
-                        <span>Create</span>
+                    <button class="bg-green-600 px-6 py-2 rounded-md flex flex-row items-center hover:scale-105 transition-all">
+                        <a class="flex" href="/expense-management-miniproject/create-expense">
+                            <div class="pr-2">
+                                <img src="./public/icons/add.svg" width="20" height="20">
+                            </div>
+                            <span>Create</span>
+                        </a>
                     </button>
                 </div>
 
@@ -127,7 +104,7 @@
                                         </div>
             
                                         <div class='grid grid-cols-1 gap-2 mx-3 items-start'>
-                                            <div class='bg-green-300 py-1 px-2 rounded-full'>
+                                            <div class='bg-green-300 py-1 px-2 rounded-full w-fit-content'>
                                                 {$category}
                                             </div>
             

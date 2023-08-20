@@ -4,6 +4,7 @@ require_once 'app/models/Expense.php';
 require_once 'app/models/User.php';
 require_once 'app/utils/Validation.php';
 require_once 'app/enums/Category.php';
+require_once 'app/controllers/DashboardController.php';
 
 class ExpenseController extends Controller
 {
@@ -17,6 +18,7 @@ class ExpenseController extends Controller
             }
 
             $this->view('detail', [
+                'id' => $id,
                 'category' => Category::getKeyFromValue($expense->category),
                 'description' => $expense->description,
                 'amount' => $expense->amount,
@@ -25,6 +27,8 @@ class ExpenseController extends Controller
                 'created_at' => $expense->created_at,
                 'updated_at' => $expense->updated_at,
                 'user_id' => $expense->user_id,
+                'first_name' =>  $_SESSION['first_name'],
+                'last_name' =>  $_SESSION['last_name'],
             ]);
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -37,6 +41,8 @@ class ExpenseController extends Controller
             $user = User::find($_SESSION['user_id']);
             $this->view('create', [
                 'user' => $user,
+                'first_name' =>  $_SESSION['first_name'],
+                'last_name' =>  $_SESSION['last_name'],
             ]);
             return;
         } catch (Exception $e) {
@@ -83,9 +89,6 @@ class ExpenseController extends Controller
     public function editForm($id)
     {
         try {
-            $user_id = $_SESSION['user_id'];
-            $user = User::find($user_id);
-
             $expense = Expense::find($id);
 
             if ($expense === null) {
@@ -93,7 +96,6 @@ class ExpenseController extends Controller
             }
 
             $this->view('update', [
-                'user' => $user,
                 'expense_id' => $id,
                 'category' => $expense->category,
                 'description' => $expense->description,
@@ -103,6 +105,8 @@ class ExpenseController extends Controller
                 'created_at' => $expense->created_at,
                 'updated_at' => $expense->updated_at,
                 'user_id' => $expense->user_id,
+                'first_name' =>  $_SESSION['first_name'],
+                'last_name' =>  $_SESSION['last_name'],
             ]);
 
             return;
@@ -141,5 +145,17 @@ class ExpenseController extends Controller
         } catch (Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    public function delete($id)
+    {
+        $expense = Expense::find($id);
+
+        if ($expense === null) {
+            return $this->view('404', []);
+        }
+
+        Expense::delete($id);
+        return;
     }
 }

@@ -22,31 +22,12 @@
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 
 <body class="bg-[#E5E5E5] w-full">
-    <!-- Navbar -->
-    <div id="navbar" class="fixed top-0 left-0 right-0">
-        <nav class="w-full h-[64px] bg-white shadow-lg flex items-center">
-            <div class="flex flex-row justify-between w-full px-5">
-                <!-- Logo -->
-                <div>
-                    <a href="/dashboard">
-                        <img src="../public/icons/logo.svg" width="40" height="40">
-                    </a>
-                </div>
-
-                <!-- Right -->
-                <div class="flex flex-row justify-end items-center">
-                    <img src="../public/icons/user.svg" width="40" height="40">
-                    <span class="px-4">Firstname Lastname</span>
-                    <img src="../public/icons/angle-down.svg" width="20" height="20">
-                </div>
-            </div>
-        </nav>
-    </div>
+    <?php include 'app/views/layout/navbar.php' ?>
 
     <!-- Main container -->
     <div class="px-9 pt-6 pb-16 bg-white h-screen flex flex-col">
@@ -97,19 +78,21 @@
         </div>
 
         <div class="self-end grid grid-cols-3 gap-8 flex-initial pr-5 font-bold">
-            <button class="drop-shadow-xl">
-                <div class="bg-red-500 rounded-md px-4 py-3 text-white flex transition-all hover:scale-105">
-                    <img src="../public/icons/delete.svg" width="20" height="20">
-                    <span class="mx-5">Delete</span>
-                </div>
-            </button>
+            <?php
+            echo "<button id='deleteBtn' class='drop-shadow-xl' data-src='/expense-management-miniproject/delete-expense/{$data['id']}'>
+                    <div class='bg-red-500 rounded-md px-4 py-3 text-white flex transition-all hover:scale-105'>
+                        <img src='../public/icons/delete.svg' width='20' height='20'>
+                        <span class='mx-5'>Delete</span>
+                    </div>
+                </button>
 
-            <button class="drop-shadow-xl">
-                <div class="bg-purple-500 rounded-md px-4 py-3 text-white flex transition-all hover:scale-105">
-                    <img src="../public/icons/edit.svg" width="20" height="20">
-                    <span class="mx-auto">Edit</span>
-                </div>
-            </button>
+                <button class='drop-shadow-xl'>
+                    <a href='/expense-management-miniproject/update-expense/{$data['id']}' class='bg-purple-500 rounded-md px-4 py-3 text-white flex transition-all hover:scale-105'>
+                        <img src='../public/icons/edit.svg' width='20' height='20'>
+                        <span class='mx-auto'>Edit</span>
+                    </a>
+                </button>";
+            ?>
 
             <button class="drop-shadow-lg transition-all hover:scale-105">
                 <a href="/expense-management-miniproject/dashboard" class="bg-[#f9f9f9] rounded-md px-4 py-3 flex">
@@ -122,5 +105,30 @@
     </div>
 
 </body>
+
+<script>
+    const deleteBtn = document.getElementById('deleteBtn');
+    deleteBtn.addEventListener('click', async () => {
+        const confirmed = await Swal.fire({
+            title: 'Confirm Delete',
+            text: 'Are you sure you want to delete?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel'
+        });
+
+        if (confirmed.isConfirmed) {
+            try {
+                const response = await fetch(deleteBtn.getAttribute('data-src'));
+                window.location.href = '/expense-management-miniproject/dashboard';
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    });
+</script>
 
 </html>
