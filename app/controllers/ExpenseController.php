@@ -5,6 +5,7 @@ require_once 'app/models/User.php';
 require_once 'app/utils/Validation.php';
 require_once 'app/enums/Category.php';
 require_once 'app/controllers/DashboardController.php';
+require_once 'config.php';
 
 class ExpenseController extends Controller
 {
@@ -64,6 +65,8 @@ class ExpenseController extends Controller
             if (count($errors) > 0) {
                 $this->view('create', [
                     'errors' => $errors,
+                    'first_name' =>  $_SESSION['first_name'],
+                    'last_name' =>  $_SESSION['last_name'],
                 ]);
                 return;
             }
@@ -79,7 +82,8 @@ class ExpenseController extends Controller
             ]);
 
             $expense_id = $expense['id'];
-            $this->show($expense_id);
+            // $this->show($expense_id);
+            header("Location: " . "expense/{$expense_id}");
             return;
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -140,7 +144,8 @@ class ExpenseController extends Controller
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
 
-            $this->show($id);
+            // $this->show($id);
+            header("Location: " . DIRECTION_URL . "expense/{$id}");
             return;
         } catch (Exception $e) {
             echo $e->getMessage();
