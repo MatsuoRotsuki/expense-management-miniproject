@@ -73,10 +73,10 @@ require_once "app/enums/Category.php";
               <option value="" selected hidden>Category</option>
               <?php
               foreach (Category::CATEGORY as $key => $value) {
-                if ($value == $data['category']) {
-                  echo "<option selected value='$value'>$key</option>";
+                if ($key == $data['category']) {
+                  echo "<option selected value='$key'>$value</option>";
                 } else {
-                  echo "<option value='$value'>$key</option>";
+                  echo "<option value='$key'>$value</option>";
                 }
               }
               ?>

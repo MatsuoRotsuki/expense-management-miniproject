@@ -70,7 +70,7 @@
             <!-- List -->
             <div>
                 <div class="flex justify-between py-3">
-                    <div class="text-lg font-bold">List</div>
+                    <div class="text-2xl font-bold">Expenses List</div>
                     <button class="bg-green-600 px-6 py-2 rounded-md flex flex-row items-center hover:scale-105 transition-all">
                         <a class="flex" href="/expense-management-miniproject/create-expense">
                             <div class="pr-2">
@@ -84,6 +84,9 @@
 
                 <div class="grid grid-cols-4 gap-4 justify-items-stretch">
                     <?php
+
+                    require_once "app/enums/Category.php";
+
                     foreach ($data['expense'] as $item) {
                         $category =  $item['category'];
                         $description =  $item['description'];
@@ -91,6 +94,7 @@
                         $image =  $item['image'];
                         $location =  $item['location'];
                         $id =  $item['id'];
+                        $time = date('d/m/Y h:i:sa', strtotime($item['created_at']));
 
                         echo "<div onclick='redirectToExpense({$id})' class='border-black border rounded-lg py-3 px-5 
                                         duration-300
@@ -115,7 +119,7 @@
             
                                             <div class='flex flex-row justify-start'>
                                                 <img src='./public/icons/time.svg' width='20' height='20' alt=''>
-                                                <div class='mx-4 font-light italic'>15/08/2023 - 10:00am</div>
+                                                <div class='mx-4 font-light italic'>{$time}</div>
                                             </div>
             
                                             <div class='flex flex-row justify-start'>

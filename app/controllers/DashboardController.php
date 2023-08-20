@@ -15,7 +15,8 @@ class DashboardController extends Controller
             if ($item['amount'] < 0) $spending -= $item['amount'];
         }
         $expense = array_map(function ($item) {
-            $item['category'] = Category::getKeyFromValue($item['category']);
+            $item['image'] = Category::ICONS[$item['category']];
+            $item['category'] = Category::CATEGORY[$item['category']];
             return $item;
         }, $userExpense);
 
