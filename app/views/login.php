@@ -76,7 +76,7 @@
             <!-- Forgot Password? -->
             <div class="flex-none pb-8">
               <div class="mx-auto text-right text-sm">
-                <a href="/signup">Do not have an account ?</a>
+                <a href="/expense-management-miniproject/signup">Do not have an account ?</a>
               </div>
             </div>
 

@@ -7,11 +7,13 @@ class Router
 
     private function __construct()
     {
-        Route::get('/', ['AuthController', 'login']);
         Route::get('/login', ['AuthController', 'login']);
         Route::get('/signup', ['AuthController', 'signup']);
         Route::post('/login', ['AuthController', 'login']);
         Route::post('/signup', ['AuthController', 'signup']);
+
+        Route::get('/', ['DashboardController', 'show']);
+        Route::middleware('AuthMiddleware');
 
         Route::post('/logout', ['AuthController', 'logout']);
         Route::get('/logout', ['AuthController', 'logout']);

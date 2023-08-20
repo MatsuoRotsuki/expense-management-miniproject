@@ -21,12 +21,16 @@ class AuthController extends Controller
                 return;
             }
 
-            // hash password ...
+            $hashPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
             // Find user exist
-            $user = User::where(['email' => $_POST['email'], 'password' => $_POST['password']]);
+            $user = User::where(['email' => $_POST['email']]);
             if ($user == null) {
                 $this->view('login', ['errorMessage' => 'User not found!']);
+                return;
+            }
+            if (!password_verify($_POST['password'], $user[0]['password'])) {
+                $this->view('login', ['errorMessage' => 'Incorrect password']);
                 return;
             }
 
@@ -91,11 +95,12 @@ class AuthController extends Controller
                 return;
             }
 
+            $hashPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
             // Create new account
             $newUser = User::create([
                 'email' => $_POST['email'],
-                'password' => $_POST['password'],
+                'password' => $hashPassword,
                 'first_name' => $_POST['firstname'],
                 'last_name' => $_POST['lastname'],
             ]);
