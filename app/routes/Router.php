@@ -19,7 +19,7 @@ class Router
         Route::get('/dashboard', ['DashboardController', 'show']);
         Route::middleware('AuthMiddleware');
 
-        Route::get('/expense/:id', ['ExpenseController', 'get']);
+        Route::get('/expense/:id', ['ExpenseController', 'show']);
         Route::middleware('AuthMiddleware');
     }
 

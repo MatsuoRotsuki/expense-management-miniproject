@@ -46,12 +46,12 @@
 
     <!-- Main container -->
     <div class="px-9 pt-6 pb-16 bg-white h-screen flex flex-col">
-        <div class="float-left mt-16 bg-[#f9f9f9] rounded-full px-5 py-3 flex-none self-start">
+        <!-- <div class="float-left mt-16 bg-[#f9f9f9] rounded-full px-5 py-3 flex-none self-start">
             <button class="flex mx-auto">
                 <img src="../public/icons/back.svg" width="20" height="20">
                 <span class="mx-5">Back</span>
             </button>
-        </div>
+        </div> -->
 
         <div class="flex flex-row self-center items-center flex-1 justify-stretch">
             <div class="p-12 rounded-full border-black border-2 bg-white m-5">
@@ -64,7 +64,9 @@
 
                 <div class="flex flex-row justify-start">
                     <img src="../public/icons/comment-alt.svg" width="30" height="30" alt="">
-                    <div class="mx-4">Dong tien thue nha</div>
+                    <div class="mx-4">
+                        <?= $data['description'] ?>
+                    </div>
                 </div>
 
                 <div class="flex flex-row justify-start">
@@ -86,24 +88,24 @@
 
         <div class="self-end grid grid-cols-3 gap-8 flex-initial pr-5 font-bold">
             <button class="drop-shadow-xl">
-                <div class="bg-red-500 rounded-md px-4 py-3 text-white flex">
+                <div class="bg-red-500 rounded-md px-4 py-3 text-white flex transition-all hover:scale-105">
                     <img src="../public/icons/delete.svg" width="20" height="20">
                     <span class="mx-5">Delete</span>
                 </div>
             </button>
 
             <button class="drop-shadow-xl">
-                <div class="bg-purple-500 rounded-md px-4 py-3 text-white flex">
+                <div class="bg-purple-500 rounded-md px-4 py-3 text-white flex transition-all hover:scale-105">
                     <img src="../public/icons/edit.svg" width="20" height="20">
                     <span class="mx-auto">Edit</span>
                 </div>
             </button>
 
-            <button class="drop-shadow-lg">
-                <div class="bg-[#f9f9f9] rounded-md px-4 py-3 flex">
+            <button class="drop-shadow-lg transition-all hover:scale-105">
+                <a href="/expense-management-miniproject/dashboard" class="bg-[#f9f9f9] rounded-md px-4 py-3 flex">
                     <img src="../public/icons/back.svg" width="20" height="20">
                     <span class="mx-auto">Cancel</span>
-                </div>
+                </a>
             </button>
         </div>
 

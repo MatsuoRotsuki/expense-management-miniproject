@@ -104,6 +104,7 @@
                     </button>
                 </div>
 
+
                 <div class="grid grid-cols-4 gap-4 justify-items-stretch">
                     <?php
                     foreach ($data['expense'] as $item) {
@@ -112,15 +113,13 @@
                         $amount =  $item['amount'];
                         $image =  $item['image'];
                         $location =  $item['location'];
+                        $id =  $item['id'];
 
-                        echo "<div class='border-black border rounded-lg py-3 px-5 
+                        echo "<div onclick='redirectToExpense({$id})' class='border-black border rounded-lg py-3 px-5 
                                         duration-300
                                         hover:cursor-pointer
                                         hover:shadow-md
                                         hover:scale-105'>
-                                    <div class='float-right'>
-                                        <img src='./public/icons/menu-burger.svg' width='20' height='20'>
-                                    </div>
             
                                     <div class='flex flex-row items-center'>
                                         <div class='rounded-[50%] border-black border-2 bg-white m-2'>
@@ -147,7 +146,8 @@
                                                 <div class='mx-4 font-light'>{$location}</div>
                                             </div>
                                         </div>
-                                    </div>";
+                                    </div> 
+                                ";
                         if ($amount < 0) {
                             echo "
                                 <div class='float-right'>
@@ -205,5 +205,11 @@
     </div>
 
 </body>
+
+<script>
+    function redirectToExpense(id, url = '/expense-management-miniproject/expense/') {
+        window.location.href = url + id;
+    }
+</script>
 
 </html>

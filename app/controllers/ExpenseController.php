@@ -4,10 +4,23 @@ require_once 'app/models/Expense.php';
 
 class ExpenseController extends Controller
 {
-    public function get($id)
+    public function show($id)
     {
-        // get expense by id...
+        $expense = Expense::where(['id' => $id]);
 
-        $this->view('detail', ['id' => $id]);
+        if (count($expense) == 0) {
+            $this->view('404');
+            return;
+        }
+
+        $this->view('detail', [
+            'id' => $id,
+            'category' => $expense[0]['category'],
+            'description' => $expense[0]['description'],
+            'amount' => $expense[0]['amount'],
+            'image' => $expense[0]['image'],
+            'location' => $expense[0]['location'],
+            'created_at' => $expense[0]['created_at'],
+        ]);
     }
 }
