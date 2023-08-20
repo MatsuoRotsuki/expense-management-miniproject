@@ -20,6 +20,11 @@ class Router
         Route::middleware('AuthMiddleware');
 
         Route::get('/expense/:id', ['ExpenseController', 'show']);
+        Route::get('/create-expense', ['ExpenseController', 'createForm']);
+        Route::post('/create-expense', ['ExpenseController', 'store']);
+
+        Route::get('/update-expense/:id', ['ExpenseController', 'editForm']);
+        Route::post('/update-expense/:id', ['ExpenseController', 'update']);
         Route::middleware('AuthMiddleware');
     }
 

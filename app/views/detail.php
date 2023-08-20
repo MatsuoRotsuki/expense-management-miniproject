@@ -1,3 +1,7 @@
+<?php
+
+
+?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -29,7 +33,7 @@
             <div class="flex flex-row justify-between w-full px-5">
                 <!-- Logo -->
                 <div>
-                    <a href="../index.php">
+                    <a href="/dashboard">
                         <img src="../public/icons/logo.svg" width="40" height="40">
                     </a>
                 </div>
@@ -59,7 +63,7 @@
             </div>
             <div class="grid grid-cols-1 gap-6 text-xl ml-16 justify-items-start">
                 <div class="px-5 py-2 bg-green-600 text-white rounded-md">
-                    Expense category
+                    <?= $data['category'] ?>
                 </div>
 
                 <div class="flex flex-row justify-start">
@@ -71,17 +75,23 @@
 
                 <div class="flex flex-row justify-start">
                     <img src="../public/icons/time.svg" width="30" height="30" alt="">
-                    <div class="mx-4 italic">15/08/2021 - 10:00am</div>
+                    <div class="mx-4 italic">
+                        <?= $data['created_at'] ?>
+                    </div>
                 </div>
 
                 <div class="flex flex-row justify-start">
                     <img src="../public/icons/location.svg" width="30" height="30" alt="">
-                    <div class="mx-4">Dai hoc Bach Khoa Ha Noi</div>
+                    <div class="mx-4">
+                        <?= $data['location'] ?>
+                    </div>
                 </div>
 
                 <div class="flex flex-row justify-start">
                     <img src="../public/icons/usd-circle.svg" width="30" height="30" alt="">
-                    <div class="mx-4 text-red-500">-100.000VND</div>
+                    <div class="mx-4 text-red-500">
+                        <?= $data['amount'] ?> VND
+                    </div>
                 </div>
             </div>
         </div>

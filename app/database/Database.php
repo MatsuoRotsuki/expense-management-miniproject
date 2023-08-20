@@ -12,7 +12,7 @@ class Database {
     private $hostname = "localhost";
     private $username = "root";
     private $password = "";
-    private $dbname = "e";
+    private $dbname = "pure";
     
     private function __construct()
     {

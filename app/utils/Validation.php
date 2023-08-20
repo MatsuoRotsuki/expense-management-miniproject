@@ -35,6 +35,17 @@ class Validation
                         if (!preg_match('/^[\w.-]+@[\w.-]+\.\w+$/', $data[$field])) {
                             $errors[] = "The $field field must be in correct email format";
                         }
+                        break;
+                    case 'numeric':
+                        if (!preg_match('/^[0-9]+$/', $data[$field])) {
+                            $errors[] = "The $field field must be a number";
+                        }
+                        break;
+                    case 'url':
+                        if (!filter_var($data[$field], FILTER_VALIDATE_URL)) {
+                            $errors[] = "The $field field must be an url";
+                        }
+                        break;
                     default:
                         break;
                 }
