@@ -76,7 +76,7 @@
             <!-- Forgot Password? -->
             <div class="flex-none pb-8">
               <div class="mx-auto text-right text-sm">
-                <a href="./signup">Do not have an account ?</a>
+                <a href="/signup">Do not have an account ?</a>
               </div>
             </div>
 
@@ -84,14 +84,12 @@
             <div class="flex-none px-10">
               <input id="loginSubmit" name="loginSubmit" value="LOGIN" type="submit" class="cursor-pointer w-full bg-blue-500 text-xl text-white text-center mx-auto py-4 rounded-[25px] shadow-lg hover:bg-blue-700">
               </input>
-              </input>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-  </script>
 
   <?php
   if (isset($data['errorMessage'])) {
