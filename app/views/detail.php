@@ -40,7 +40,7 @@
 
         <div class="flex flex-row self-center items-center flex-1 justify-stretch">
             <div class="p-12 rounded-full border-black border-2 bg-white m-5">
-                <img src="../public/icons/rent.svg" width="240" height="240">
+                <img src="<?= '.' . $data['image'] ?>" width="240" height="240">
             </div>
             <div class="grid grid-cols-1 gap-6 text-xl ml-16 justify-items-start">
                 <div class="px-5 py-2 bg-green-600 text-white rounded-md">

@@ -37,7 +37,7 @@ class Validation
                         }
                         break;
                     case 'numeric':
-                        if (!preg_match('/^[0-9]+$/', $data[$field])) {
+                        if (!preg_match('/^[-+]?\d+(\.\d+)?$/', $data[$field])) {
                             $errors[] = "The $field field must be a number";
                         }
                         break;
