@@ -3,10 +3,11 @@
     <nav class="w-full h-[64px] bg-white shadow-lg flex items-center">
         <div class="flex flex-row justify-between w-full px-5">
             <!-- Logo -->
-            <div>
+            <div class="flex flex-row justify-start items-center">
                 <a href="/expense-management-miniproject/dashboard">
                     <img src="./public/icons/logo.svg" width="40" height="40">
                 </a>
+                <span class="font-semibold text-2xl px-5">Moneykeeper</span>
             </div>
 
             <!-- Right -->
