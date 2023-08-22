@@ -20,6 +20,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet">
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
+    <link rel="icon" type="image/x-icon" href="public/icons/logo.svg">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -42,7 +43,7 @@
             <div class="p-12 rounded-full border-black border-2 bg-white m-5">
                 <img src="<?= '.' . $data['image'] ?>" width="240" height="240">
             </div>
-            <div class="grid grid-cols-1 gap-6 text-xl ml-16 justify-items-start">
+            <div class="grid grid-cols-1 gap-6 text-2xl ml-16 justify-items-start">
                 <div class="px-5 py-2 bg-green-600 text-white rounded-md">
                     <?= $data['category'] ?>
                 </div>
@@ -70,9 +71,17 @@
 
                 <div class="flex flex-row justify-start">
                     <img src="../public/icons/usd-circle.svg" width="30" height="30" alt="">
-                    <div class="mx-4 text-red-500">
-                        <?= $data['amount'] ?> VND
-                    </div>
+                    <?php
+                        if ($data['amount'] > 0) {
+                            echo "<div class='mx-4 text-green-500'>
+                                +{$data['amount']} VND
+                            </div>";
+                        } else {
+                            echo "<div class='mx-4 text-red-500'>
+                                {$data['amount']} VND
+                            </div>";
+                        }
+                    ?>
                 </div>
             </div>
         </div>

@@ -22,6 +22,7 @@ require_once "app/enums/Category.php";
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet">
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
+  <link rel="icon" type="image/x-icon" href="public/icons/logo.svg">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -92,12 +93,12 @@ require_once "app/enums/Category.php";
           </div>
         </button>
 
-        <button class="drop-shadow-lg">
-          <a href="/expense-management-miniproject/dashboard" class="bg-[#f9f9f9] rounded-md px-4 py-3 flex hover:bg-gray-300">
-            <img src="public/icons/back.svg" width="20" height="20">
+        <a href="<?= "/expense-management-miniproject/dashboard" . $data['expense_id'] ?>" class="drop-shadow-lg">
+          <div class="bg-[#f9f9f9] rounded-md px-4 py-3 flex">
+            <img src="./public/icons/back.svg" width="20" height="20">
             <span class="mx-auto">Cancel</span>
-          </a>
-        </button>
+          </div>
+        </a>
       </div>
 
     </div>

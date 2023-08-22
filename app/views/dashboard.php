@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Moneykepper</title>
+    <title>Moneykeeper</title>
 
     <!-- Custom Font -->
     <!-- font-family: 'Lato', sans-serif; -->
@@ -16,6 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet">
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
+    <link rel="icon" type="image/x-icon" href="public/icons/logo.svg">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -26,8 +27,8 @@
     <?php include 'app/views/layout/navbar.php' ?>
 
     <!-- Main container -->
-    <div class="px-8 py-6 mt-[64px] bg-white">
-        <div class="flex flex-col w-full items-stretch">
+    <div class="px-8 py-6 bg-white min-h-screen">
+        <div class="flex flex-col w-full mt-[80px]">
 
             <!-- Income, Expense, Balance -->
             <div class="grid grid-cols-3 gap-8 h-[160px]">
@@ -70,7 +71,7 @@
             <!-- List -->
             <div>
                 <div class="flex justify-between py-3">
-                    <div class="text-2xl font-bold">Expenses List</div>
+                    <div class="text-2xl font-bold">Transactions List</div>
                     <button class="bg-green-600 px-6 py-2 rounded-md flex flex-row items-center hover:scale-105 transition-all">
                         <a class="flex" href="/expense-management-miniproject/create-expense">
                             <div class="pr-2">
@@ -108,7 +109,7 @@
                                         </div>
             
                                         <div class='grid grid-cols-1 gap-2 mx-3 items-start'>
-                                            <div class='bg-green-300 py-1 px-2 rounded-full w-fit-content'>
+                                            <div class='bg-yellow-400 font-semibold py-1 px-5 rounded-full w-fit-content justify-self-start'>
                                                 {$category}
                                             </div>
             
@@ -181,6 +182,16 @@
                         </div>
                     </div> -->
                 </div>
+                <?php 
+                    if (!count($data['expense'])) {
+                        echo "<div class='min-h-[200px]'>
+                            <div class='mx-auto flex flex-col items-center'>
+                                <img src='public/icons/no-data.svg' width='184' height='152'>
+                                <span class='text-md font-light text-gray-600'>No data</span>
+                            </div>
+                        </div>";
+                    }
+                ?>
             </div>
         </div>
     </div>

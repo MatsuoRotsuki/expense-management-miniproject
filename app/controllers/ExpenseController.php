@@ -104,7 +104,7 @@ class ExpenseController extends Controller
                 'category' => $expense->category,
                 'description' => $expense->description,
                 'amount' => $expense->amount,
-                'image' => $expense->image,
+                'image' => Category::ICONS[$expense->category],
                 'location' => $expense->location,
                 'created_at' => $expense->created_at,
                 'updated_at' => $expense->updated_at,
