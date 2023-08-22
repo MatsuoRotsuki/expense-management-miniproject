@@ -56,11 +56,10 @@ passwordInput.addEventListener('input', () => {
 //     });
 // }
 
-async function checkOnSubmit() {
+function checkOnSubmit() {
     if (!checkEmailFormat(emailInput.value) || !checkPasswordFormat(passwordInput.value)) {
         notifyInvalid('Invalid email or password')
         return false;
     }
-    // await showLoginSuccess();
     return true;
 }

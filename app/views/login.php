@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="public/icons/logo.svg">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -68,15 +69,15 @@
             </div>
 
             <!-- Remember me? -->
-            <!-- <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2">
               <label for="remember_me">Remember me:</label>
-              <input type="checkbox" id="remember_me" name="remember_me">
-            </div> -->
+              <input type="checkbox" id="remember_me" name="rememberMe">
+            </div>
 
             <!-- Forgot Password? -->
             <div class="flex-none pb-8">
               <div class="mx-auto text-right text-sm">
-                <a href="./signup">Do not have an account ?</a>
+                <a href="/expense-management-miniproject/signup">Do not have an account ?</a>
               </div>
             </div>
 
@@ -84,14 +85,12 @@
             <div class="flex-none px-10">
               <input id="loginSubmit" name="loginSubmit" value="LOGIN" type="submit" class="cursor-pointer w-full bg-blue-500 text-xl text-white text-center mx-auto py-4 rounded-[25px] shadow-lg hover:bg-blue-700">
               </input>
-              </input>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-  </script>
 
   <?php
   if (isset($data['errorMessage'])) {

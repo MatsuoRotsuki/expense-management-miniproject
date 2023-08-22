@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Moneykepper</title>
+    <title>Moneykeeper</title>
 
     <!-- Custom Font -->
     <!-- font-family: 'Lato', sans-serif; -->
@@ -16,6 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet">
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css'>
+    <link rel="icon" type="image/x-icon" href="public/icons/logo.svg">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -23,33 +24,11 @@
 </head>
 
 <body class="bg-[#E5E5E5] w-full">
-    <!-- Navbar -->
-    <div id="navbar" class="fixed top-0 left-0 right-0">
-        <nav class="w-full h-[64px] bg-white shadow-lg flex items-center">
-            <div class="flex flex-row justify-between w-full px-5">
-                <!-- Logo -->
-                <div>
-                    <a href="../index.php">
-                        <img src="./public/icons/logo.svg" width="40" height="40">
-                    </a>
-                </div>
-
-                <!-- Right -->
-                <div class="flex flex-row justify-end items-center">
-                    <img src="./public/icons/user.svg" width="40" height="40">
-                    <span class="px-4">
-                        <?= $data['first_name'] ?>
-                        <?= $data['last_name'] ?>
-                    </span>
-                    <img src="./public/icons/angle-down.svg" width="20" height="20">
-                </div>
-            </div>
-        </nav>
-    </div>
+    <?php include 'app/views/layout/navbar.php' ?>
 
     <!-- Main container -->
-    <div class="px-8 py-6 mt-[64px] bg-white">
-        <div class="flex flex-col w-full items-stretch">
+    <div class="px-8 py-6 bg-white min-h-screen">
+        <div class="flex flex-col w-full mt-[80px]">
 
             <!-- Income, Expense, Balance -->
             <div class="grid grid-cols-3 gap-8 h-[160px]">
@@ -92,32 +71,37 @@
             <!-- List -->
             <div>
                 <div class="flex justify-between py-3">
-                    <div class="text-lg font-bold">List</div>
-                    <button class="bg-green-600 px-6 py-2 rounded-md flex flex-row items-center">
-                        <div class="pr-2">
-                            <img src="./public/icons/add.svg" width="20" height="20">
-                        </div>
-                        <span>Create</span>
+                    <div class="text-2xl font-bold">Transactions List</div>
+                    <button class="bg-green-600 px-6 py-2 rounded-md flex flex-row items-center hover:scale-105 transition-all">
+                        <a class="flex" href="/expense-management-miniproject/create-expense">
+                            <div class="pr-2">
+                                <img src="./public/icons/add.svg" width="20" height="20">
+                            </div>
+                            <span>Create</span>
+                        </a>
                     </button>
                 </div>
 
+
                 <div class="grid grid-cols-4 gap-4 justify-items-stretch">
                     <?php
+
+                    require_once "app/enums/Category.php";
+
                     foreach ($data['expense'] as $item) {
                         $category =  $item['category'];
                         $description =  $item['description'];
                         $amount =  $item['amount'];
                         $image =  $item['image'];
                         $location =  $item['location'];
+                        $id =  $item['id'];
+                        $time = date('d/m/Y h:i:sa', strtotime($item['created_at']));
 
-                        echo "<div class='border-black border rounded-lg py-3 px-5 
+                        echo "<div onclick='redirectToExpense({$id})' class='border-black border rounded-lg py-3 px-5 
                                         duration-300
                                         hover:cursor-pointer
                                         hover:shadow-md
                                         hover:scale-105'>
-                                    <div class='float-right'>
-                                        <img src='./public/icons/menu-burger.svg' width='20' height='20'>
-                                    </div>
             
                                     <div class='flex flex-row items-center'>
                                         <div class='rounded-[50%] border-black border-2 bg-white m-2'>
@@ -125,7 +109,7 @@
                                         </div>
             
                                         <div class='grid grid-cols-1 gap-2 mx-3 items-start'>
-                                            <div class='bg-green-300 py-1 px-2 rounded-full'>
+                                            <div class='bg-yellow-400 font-semibold py-1 px-5 rounded-full w-fit-content justify-self-start'>
                                                 {$category}
                                             </div>
             
@@ -136,7 +120,7 @@
             
                                             <div class='flex flex-row justify-start'>
                                                 <img src='./public/icons/time.svg' width='20' height='20' alt=''>
-                                                <div class='mx-4 font-light italic'>15/08/2023 - 10:00am</div>
+                                                <div class='mx-4 font-light italic'>{$time}</div>
                                             </div>
             
                                             <div class='flex flex-row justify-start'>
@@ -144,7 +128,8 @@
                                                 <div class='mx-4 font-light'>{$location}</div>
                                             </div>
                                         </div>
-                                    </div>";
+                                    </div> 
+                                ";
                         if ($amount < 0) {
                             echo "
                                 <div class='float-right'>
@@ -197,10 +182,26 @@
                         </div>
                     </div> -->
                 </div>
+                <?php 
+                    if (!count($data['expense'])) {
+                        echo "<div class='min-h-[200px]'>
+                            <div class='mx-auto flex flex-col items-center'>
+                                <img src='public/icons/no-data.svg' width='184' height='152'>
+                                <span class='text-md font-light text-gray-600'>No data</span>
+                            </div>
+                        </div>";
+                    }
+                ?>
             </div>
         </div>
     </div>
 
 </body>
+
+<script>
+    function redirectToExpense(id, url = '/expense-management-miniproject/expense/') {
+        window.location.href = url + id;
+    }
+</script>
 
 </html>

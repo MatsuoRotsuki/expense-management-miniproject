@@ -1,34 +1,25 @@
 <?php
 class Cipher
 {
-    public static $key = 'abcd1234';
+    private static $key = 'abcd1234';
+    private static $ivlen = 16;
+    private static $algo = 'AES-256-CBC';
 
     public static function generateRememberToken($userId)
     {
         $plaintext = strval($userId);
-        $ivlen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
-        $iv = openssl_random_pseudo_bytes($ivlen);
-        $ciphertext_raw = openssl_encrypt($plaintext, $cipher, self::$key, $options = OPENSSL_RAW_DATA, $iv);
-        $hmac = hash_hmac('sha256', $ciphertext_raw, self::$key, $as_binary = true);
-        return base64_encode($iv . $hmac . $ciphertext_raw);
+        $iv = random_bytes(self::$ivlen);
+        $ciphertext = openssl_encrypt($plaintext, self::$algo, self::$key, 0, $iv);
+        $rememberToken = base64_encode($iv . $ciphertext);
+        return $rememberToken;
     }
 
     public static function getUserIdFromRememberToken($ciphertext)
     {
-        $c = base64_decode($ciphertext);
-        $ivlen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
-        $iv = substr($c, 0, $ivlen);
-        $hmac = substr($c, $ivlen, $sha2len = 32);
-        $ciphertext_raw = substr($c, $ivlen + $sha2len);
-        $original_plaintext = openssl_decrypt($ciphertext_raw, $cipher, self::$key, $options = OPENSSL_RAW_DATA, $iv);
-        $calcmac = hash_hmac('sha256', $ciphertext_raw, self::$key, $as_binary = true);
-        if (hash_equals($hmac, $calcmac)) {
-            return $original_plaintext;
-        }
-        return null;
+        $rememberToken = base64_decode($ciphertext);
+        $iv = substr($rememberToken, 0, self::$ivlen);
+        $ciphertext = substr($rememberToken, self::$ivlen);
+        $userId = openssl_decrypt($ciphertext, self::$algo, self::$key, 0, $iv);
+        return $userId;
     }
 }
-
-// echo $ciphertext = Util::generateRememberToken(1);
-// echo "\n";
-// echo Util::getUserIdFromRememberToken($ciphertext);

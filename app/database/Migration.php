@@ -1,6 +1,8 @@
 <?php
 
-require_once './Database.php';
+require_once 'app/database/Database.php';
+require_once 'app/models/User.php';
+require_once 'app/models/Expense.php';
 
 class Migration {
 
@@ -38,6 +40,24 @@ class Migration {
             echo $e->getMessage();
         }
     }
-}
 
-Migration::migrate();
+    public static function seed()
+    {
+        try {
+            for ($i = 0; $i < 100; $i++) {
+                Expense::create([
+                    'category' => random_int(1, 12),
+                    'description' => str_shuffle("ABCDEFGHIJKLMNOPQ"),
+                    'amount' => random_int(10000, 100000),
+                    'location' => 'Hanoi',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'user_id' => 1,
+                ]);
+            }
+        } catch(Exception $e)
+        {
+            echo $e->getMessage();
+        }
+    }
+}
