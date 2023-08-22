@@ -93,7 +93,7 @@ require_once "app/enums/Category.php";
           </div>
         </button>
 
-        <a href="<?= "/expense-management-miniproject/dashboard" . $data['expense_id'] ?>" class="drop-shadow-lg">
+        <a href="/expense-management-miniproject/dashboard">
           <div class="bg-[#f9f9f9] rounded-md px-4 py-3 flex">
             <img src="./public/icons/back.svg" width="20" height="20">
             <span class="mx-auto">Cancel</span>
