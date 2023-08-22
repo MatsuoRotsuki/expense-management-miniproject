@@ -17,10 +17,12 @@ class Database
 
     private function __construct()
     {
-        self::$connection = new mysqli($this->hostname, $this->username, $this->password, $this->dbname);
-
-        if (self::$connection->connect_error) {
-            die("Connection failed: " . self::$connection->connect_error);
+        try {
+            $conn = "mysql:host=$this->hostname;dbname=$this->dbname";
+            self::$connection = new PDO($conn, $this->username, $this->password);
+            self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("Database connection failed: " . $e->getMessage());
         }
     }
 
@@ -31,11 +33,6 @@ class Database
         }
 
         return self::$connection;
-    }
-
-    public static function query(string $query)
-    {
-        return self::getConnection()->query($query);
     }
 
     public static function prepare(string $query)

@@ -10,22 +10,21 @@ trait Query
      */
     public static function all(): array
     {
-        $model = new static;
-        $table = $model->table;
+        try {
+            $model = new static;
+            $table = $model->table;
 
-        $statement = "SELECT * from $table";
-        $stmt = Database::prepare($statement);
-        $stmt->execute();
+            $statement = "SELECT * from $table";
+            $stmt = Database::prepare($statement);
+            $stmt->execute();
 
-        $result = $stmt->get_result();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $rows = [];
-        while($row = $result->fetch_assoc()) {
-            $rows[] = $row;
+            return $results;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return [];
         }
-
-        $stmt->close();
-        return $rows;
     }
 
     /**
@@ -38,22 +37,19 @@ trait Query
             $table = $model->table;
             $primaryKey = $model->primaryKey;
 
-            $statement = "SELECT * from $table where id = ?";
+            $statement = "SELECT * from $table where $primaryKey = :identifier";
             $stmt = Database::prepare($statement);
-            $stmt->bind_param('i', $identifier);
+            $stmt->bindParam(':identifier', $identifier);
             $stmt->execute();
 
-            $result = $stmt->get_result();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
     
-            if ($result->num_rows === 0) {
-                $stmt->close();
+            if (!$result) {
                 return null;
             } else {
-                $row = $result->fetch_assoc();
-                foreach ($row as $key => $value) {
+                foreach ($result as $key => $value) {
                     $model->{$key} = $value;
                 }
-                $stmt->close();
                 return $model;
             }
         } catch (Exception $e)
@@ -76,14 +72,9 @@ trait Query
             $model = new static;
             $table = $model->table;
 
-            $types = '';
-            $params = [];
-
             $whereConditions = [];
             foreach ($assoc_array as $key => $value) {
-                $whereConditions[] = $key . " = ?";
-                $types .= 's';
-                $params[] = $value;
+                $whereConditions[] = $key . " = :$key";
             }
 
             $whereClause = implode(" AND ", $whereConditions);
@@ -91,20 +82,11 @@ trait Query
             $statement = "SELECT * FROM $table WHERE $whereClause";
             $stmt = Database::prepare($statement);
 
-            $stmt->bind_param($types, ...$params);
-            $stmt->execute();
+            $stmt->execute($assoc_array);
             
-            $result = $stmt->get_result();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $rows = [];
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    $rows[] = $row;
-                }
-            }
-
-            $stmt->close();
-            return $rows;
+            return $results;
         } catch (Exception $e)
         {
             echo $e->getMessage();
@@ -117,30 +99,19 @@ trait Query
             $model = new static;
             $table = $model->table;
 
-            $types = '';
-            $params = [];
+            $values = implode(', ', $array);
 
-            $values = implode(', ', array_fill(0, count($array), '?'));
-            foreach ($array as $value) {
-                $types .= 's';
-                $params[] = $value;
-            }
-            $statement = "SELECT * FROM $table WHERE $attribute_name IN ($values)";
+            $statement = "SELECT * FROM $table WHERE :attribute_name IN (:values)";
             $stmt = Database::prepare($statement);
 
-            $stmt->bind_param($types, ...$params);
-            $stmt->execute();
+            $stmt->execute([
+                'attribute_name' => $attribute_name,
+                'values' => $values
+            ]);
 
-            $result = $stmt->get_result();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $rows = [];
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    $rows[] = $row;
-                }
-            }
-            $stmt->close();
-            return $rows;
+            return $results;
         } catch (Exception $e)
         {
             echo $e->getMessage();
@@ -153,22 +124,17 @@ trait Query
             $model = new static;
             $table = $model->table;
 
-            $statement = "SELECT * FROM $table WHERE $attribute_name BETWEEN ? AND ?";
+            $statement = "SELECT * FROM $table WHERE $attribute_name BETWEEN :lower_bound AND :upper_bound";
             $stmt = Database::prepare($statement);
 
-            $stmt->bind_param('ss', $lower_bound, $upper_bound);
-            $stmt->execute();
+            $stmt->execute([
+                'lower_bound' => $lower_bound,
+                'upper_bound' => $upper_bound,
+            ]);
 
-            $result = $stmt->get_result();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $rows = [];
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    $rows[] = $row;
-                }
-            }
-            $stmt->close();
-            return $rows;
+            return $results;
 
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -181,38 +147,54 @@ trait Query
      */
     public static function create(array $assoc_array)
     {
-        $model = new static;
-        $table = $model->table;
+        try {
+            $model = new static;
+            $table = $model->table;
+            $primaryKey = $model->primaryKey;
+    
+            $columns =  [];
+            $createvalues = [];
+            foreach ($assoc_array as $key => $value)
+            {
+                $columns[] = $key;
+                $createvalues[] = ':' . $key;
+            }
+            $columns = implode(', ', $columns);
+            $createvalues = implode(', ', $createvalues);
+    
+            $statement = "INSERT INTO $table ($columns) VALUES ($createvalues)";
+            $stmt = Database::prepare($statement);
 
-        $columns = implode(', ', array_keys($assoc_array));
-        $values = implode(', ', array_fill(0, count($assoc_array), '?'));
+            $stmt->execute($assoc_array);
 
-        $statement = "INSERT INTO $table ($columns) VALUES ($values)";
+            //GET INSERTED ROW
+            $insert_id = Database::getConnection()->lastInsertId();
+            $newSTMT = Database::prepare("SELECT * FROM $table WHERE $primaryKey = :identifier");
+            $newSTMT->bindParam(':identifier', $insert_id);
+            $newSTMT->execute();
 
-        $connection = Database::getConnection();
-        $stmt = $connection->prepare($statement);
+            $result = $newSTMT->fetch(PDO::FETCH_ASSOC);
 
-        $types = '';
-        $params = [];
+            return $result;
 
-        foreach ($assoc_array as $key => $value) {
-            $types .= 's';
-            $params[] = $value;
+        } catch(Exception $e)
+        {
+            echo $e->getMessage();
         }
 
-        $stmt->bind_param($types, ...$params);
-        $stmt->execute();
+        // $stmt->bind_param($types, ...$params);
+        // $stmt->execute();
 
-        $id = $stmt->insert_id;
+        // $id = $stmt->insert_id;
 
-        $query = "SELECT * FROM $table WHERE id = ?";
-        $stmt = $connection->prepare($query);
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $record = $result->fetch_assoc();
+        // $query = "SELECT * FROM $table WHERE id = ?";
+        // $stmt = $connection->prepare($query);
+        // $stmt->bind_param('i', $id);
+        // $stmt->execute();
+        // $result = $stmt->get_result();
+        // $record = $result->fetch_assoc();
 
-        return $record;
+        // return $record;
     }
 
     public static function update($identifier, array $assoc_array)
@@ -221,31 +203,21 @@ trait Query
             $model = new static;
             $table = $model->table;
             $primaryKey = $model->primaryKey;
-            $types = '';
-            $params = [];
-            $setParts = [];
 
             foreach ($assoc_array as $key => $value) {
-                $setParts[] = $key . ' = ?';
-                $types .= 's';
-                $params[] = $value;
+                $setParts[] = $key . ' = :' . $key;
             }
-            
-            //id
-            $types .= 'i';
-            $params[] = $identifier;
 
             $setClauses = join(", ", $setParts);
 
-            $statement = "UPDATE $table SET $setClauses WHERE $primaryKey = ?";
+            $statement = "UPDATE $table SET $setClauses WHERE $primaryKey = :identifier";
             $stmt = Database::prepare($statement);
+            $assoc_array['identifier'] = $identifier;
 
-            $stmt->bind_param($types, ...$params);
-            $stmt->execute();
-
-            $stmt->close();
+            $stmt->execute($assoc_array);
 
             return self::find($identifier);
+
         } catch (Exception $e)
         {
             echo $e->getMessage();
@@ -261,13 +233,12 @@ trait Query
 
             $model = self::find($identifier);
 
-            $statement = "DELETE FROM $table WHERE $primaryKey = ?";
+            $statement = "DELETE FROM $table WHERE $primaryKey = :identifier";
             $stmt = Database::prepare($statement);
 
-            $stmt->bind_param('i', $identifier);
+            $stmt->bindParam(':identifier', $identifier);
             $stmt->execute();
             
-            $stmt->close();
             return $model;
         } catch (Exception $e)
         {
