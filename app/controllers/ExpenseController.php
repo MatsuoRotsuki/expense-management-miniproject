@@ -5,7 +5,7 @@ require_once 'app/models/User.php';
 require_once 'app/utils/Validation.php';
 require_once 'app/enums/Category.php';
 require_once 'app/controllers/DashboardController.php';
-require_once 'config.php';
+require_once 'app/configs/config.php';
 
 class ExpenseController extends Controller
 {
@@ -57,9 +57,9 @@ class ExpenseController extends Controller
             //Validation
             $errors = Validation::validate($_POST, [
                 'description' => 'required|min:4|max:255',
-                'amount' => 'required|numeric|min:1|max:24',
+                'amount' => 'required|integer|min:1|max:24',
                 'location' => 'max:255',
-                'category' => 'numeric',
+                'category' => 'integer|category',
             ]);
 
             if (count($errors) > 0) {
@@ -124,9 +124,9 @@ class ExpenseController extends Controller
         try {
             $errors = Validation::validate($_POST, [
                 'description' => 'required|min:4|max:255',
-                'amount' => 'required|numeric|min:1|max:24',
+                'amount' => 'required|integer|min:1|max:24',
                 'location' => 'max:255',
-                'category' => 'numeric',
+                'category' => 'integer|category',
             ]);
 
             if (count($errors) > 0) {

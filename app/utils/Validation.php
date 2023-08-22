@@ -1,4 +1,6 @@
 <?php
+require_once 'app/enums/Category.php';
+
 class Validation
 {
     public static function validate($data, $rules)
@@ -44,6 +46,16 @@ class Validation
                     case 'url':
                         if (!filter_var($data[$field], FILTER_VALIDATE_URL)) {
                             $errors[] = "The $field field must be an url";
+                        }
+                        break;
+                    case 'integer':
+                        if (!preg_match('/^-?\d+$/', $data[$field])) {
+                            $errors[] = "The $field field must be an integer";
+                        }
+                        break;
+                    case 'category':
+                        if (!in_array($data[$field], array_keys(Category::CATEGORY))) {
+                            $errors[] = "The $field field must be a category value";
                         }
                         break;
                     default:

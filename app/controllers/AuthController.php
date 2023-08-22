@@ -21,8 +21,6 @@ class AuthController extends Controller
                 return;
             }
 
-            $hashPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
             // Find user exist
             $user = User::where(['email' => $_POST['email']]);
             if ($user == null) {

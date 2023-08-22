@@ -8,7 +8,6 @@ class App
         try {
             Router::run();
         } catch (\Throwable $th) {
-            // require_once 'app/views/404.php';
             echo $th->getMessage();
         }
     }

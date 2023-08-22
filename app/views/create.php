@@ -50,7 +50,7 @@ require_once "app/enums/Category.php";
                 Add Image
               </div>
             </button> -->
-          <input type="file" name="imageFile" id="imageFile">
+          <!-- <input type="file" name="imageFile" id="imageFile"> -->
           <img src="public/icons/rent.svg" width="240" height="240">
         </div>
         <div class="grid grid-cols-1 gap-6 text-xl ml-16 justify-item-stretch">
